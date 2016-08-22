@@ -108,6 +108,9 @@ window.ARThreeOnLoad = function() {
 
 			arScene.renderOn(renderer);
 			requestAnimationFrame(tick);
+			
+			document.getElementById("mtrxHiro").innerHTML = "";
+			document.getElementById("mtrxKanji").innerHTML = "";
 		};
 
 		tick();
@@ -115,8 +118,7 @@ window.ARThreeOnLoad = function() {
 	}});
 
 	delete window.ARThreeOnLoad;
-	document.getElementById("mtrxHiro").innerHTML = "";
-	document.getElementById("mtrxKanji").innerHTML = "";
+
 
 };
 
