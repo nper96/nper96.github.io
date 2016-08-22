@@ -88,14 +88,14 @@ window.ARThreeOnLoad = function() {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(sphere);
 			arScene.scene.add(markerRoot);
-			document.getElementById("mtrxHiro").innerHTML = "HIRO";
+			document.getElementById("mtrxHiro").innerHTML = String(getMilliseconds());
 		});
 
 		arController.loadMarker('Data/patt.kanji', function(markerId) {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(torus);
 			arScene.scene.add(markerRoot);
-			document.getElementById("mtrxKanji").innerHTML = "KANJI";
+			document.getElementById("mtrxKanji").innerHTML = String(getSeconds());
 		});
 
 		var tick = function() {
@@ -108,9 +108,6 @@ window.ARThreeOnLoad = function() {
 
 			arScene.renderOn(renderer);
 			requestAnimationFrame(tick);
-			
-			document.getElementById("mtrxHiro").innerHTML = "";
-			document.getElementById("mtrxKanji").innerHTML = "";
 		};
 
 		tick();
