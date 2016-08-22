@@ -25,6 +25,10 @@ html,body {
 <p>On Chrome on Android, tap the screen to start playing video stream.</p>
 <p>Show  <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Hiro%20pattern.pdf">Hiro pattern</a> and <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Kanji%20pattern.pdf">Kanji pattern</a> to camera to display a colorful objects on top of them. Tap the screen to rotate the objects.
 
+<p>Transformation Matrices: </p>
+<p id="mtrxHiro"></p>
+<p id="mtrxKanji"></p>
+
 <p>&larr; <a href="index.html">Back to examples</a></p>
 
 <script async src="artoolkit.min.js"></script>
@@ -84,12 +88,14 @@ window.ARThreeOnLoad = function() {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(sphere);
 			arScene.scene.add(markerRoot);
+			document.getElementById("mtrxHiro").innerHTML = "HIRO";
 		});
 
 		arController.loadMarker('Data/patt.kanji', function(markerId) {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(torus);
 			arScene.scene.add(markerRoot);
+			document.getElementById("mtrxKanji").innerHTML = "KANJI";
 		});
 
 		var tick = function() {
@@ -109,6 +115,8 @@ window.ARThreeOnLoad = function() {
 	}});
 
 	delete window.ARThreeOnLoad;
+	document.getElementById("mtrxHiro").innerHTML = "";
+	document.getElementById("mtrxKanji").innerHTML = "";
 
 };
 
