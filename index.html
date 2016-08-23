@@ -88,14 +88,14 @@ window.ARThreeOnLoad = function() {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(sphere);
 			arScene.scene.add(markerRoot);
-			document.getElementById("mtrxHiro").innerHTML = String(getMilliseconds());
+			document.getElementById("mtrxHiro").innerHTML = ev.matrix;
 		});
 
 		arController.loadMarker('Data/patt.kanji', function(markerId) {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(torus);
 			arScene.scene.add(markerRoot);
-			document.getElementById("mtrxKanji").innerHTML = String(getSeconds());
+			document.getElementById("mtrxKanji").innerHTML = ev.matrix;
 		});
 
 		var tick = function() {
