@@ -67,6 +67,10 @@ window.ARThreeOnLoad = function() {
 		renderer.domElement.addEventListener('click', function(ev) {
 			ev.preventDefault();
 			rotationTarget += 1;
+			
+			var transMatrx = ev.data.matrix
+			document.getElementById("mtrxHiro").innerHTML = ev.matrix;
+			document.getElementById("mtrxKanji").innerHTML = ev.matrix;
 		}, false);
 
 		var sphere = new THREE.Mesh(
@@ -88,14 +92,12 @@ window.ARThreeOnLoad = function() {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(sphere);
 			arScene.scene.add(markerRoot);
-			document.getElementById("mtrxHiro").innerHTML = ev.matrix;
 		});
 
 		arController.loadMarker('Data/patt.kanji', function(markerId) {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(torus);
 			arScene.scene.add(markerRoot);
-			document.getElementById("mtrxKanji").innerHTML = ev.matrix;
 		});
 
 		var tick = function() {
