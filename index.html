@@ -109,9 +109,27 @@ window.ARThreeOnLoad = function() {
 			arScene.process();
 			
 			var markers = arController.getMarkerNum();
-			console.log(markers);
-			var matrx = arController.getTransformationMatrix();
-			console.log(matrx);
+			for (var i=0; i < markers.length; i++) {
+
+				var marker = arController.getMarker(i);
+				
+				var markerMatrix = new Float32Array(12);
+				var glMatrix = new Float32Array(16);
+
+				arController.getTransMatSquare(i, 1 /* marker width */, markerMatrix);
+
+				// And convert it to a WebGL matrix.
+				arController.transMatToGLMat(markerMatrix, glMatrix);
+
+				// Do something with the glMatrix ...
+				console.log(glMatrix);
+
+			}
+			
+			
+			//console.log(markers);
+			//var matrx = arController.getTransformationMatrix();
+			//console.log(matrx);
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
 			sphere.rotation.z += rotationV;
