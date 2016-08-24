@@ -108,33 +108,8 @@ window.ARThreeOnLoad = function() {
 		var tick = function() {
 			arScene.process();
 			
-			// Detect barcode markers
-			arController.setPatternDetectionMode(artoolkit.AR_MATRIX_CODE_DETECTION);
-
-			// Process the video frame.
-			arController.detectMarker();
-
-			var markerMatrix = new Float32Array(12);
-			var glMatrix = new Float32Array(16);
-
-			// Get the number of markers from the ARController and iterate over each marker.
-			var markers = arController.getMarkerNum();
-			for (var i=0; i < markers.length; i++) {
-
-				var marker = arController.getMarker(i);
-
-				// If we found the number 5 marker, let's get its transform matrix.
-				if (marker.idMatrix === 0) {
-					arController.getTransMatSquare(i, 1 /* marker width */, markerMatrix);
-
-					// And convert it to a WebGL matrix.
-					arController.transMatToGLMat(markerMatrix, glMatrix);
-
-					// Do something with the glMatrix ...
-					console.log(glMatrix);
-
-				}
-			}
+			var matrx = artoolkit.getTransformationMatrix();
+			console.log(matrx);
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
 			sphere.rotation.z += rotationV;
