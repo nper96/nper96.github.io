@@ -71,7 +71,7 @@ window.ARThreeOnLoad = function() {
 			//var transMatrx = ev.data.matrix
 			//document.getElementById("mtrxHiro").innerHTML = ev.matrix;
 			//document.getElementById("mtrxKanji").innerHTML = ev.matrix;
-			console.log("saw a barcode marker with id");
+			
 		}, false);
 
 		var sphere = new THREE.Mesh(
@@ -93,12 +93,16 @@ window.ARThreeOnLoad = function() {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(sphere);
 			arScene.scene.add(markerRoot);
+			
+			console.log("saw a barcode marker hiro");
 		});
 
 		arController.loadMarker('Data/patt.kanji', function(markerId) {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(torus);
 			arScene.scene.add(markerRoot);
+			
+			console.log("saw a barcode marker kanji");
 		});
 
 		var tick = function() {
