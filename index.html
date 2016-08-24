@@ -106,7 +106,7 @@ window.ARThreeOnLoad = function() {
 		});
 
 		var tick = function() {
-			arScene.process();
+			arController.process();
 			
 			var matrx = arScene.getTransformationMatrix();
 			console.log(matrx);
