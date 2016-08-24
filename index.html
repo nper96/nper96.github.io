@@ -9,6 +9,7 @@ html,body {
 	width: 100%;
 	text-align: center;
 	overflow-x: hidden;
+	background-color: #F5F1C4;
 }
 .portrait canvas {
 	transform-origin: 0 0;
@@ -21,8 +22,7 @@ html,body {
 </head>
 <body>
 
-<h3>Pattern marker example with Three.js</h3>
-<p>Uses  <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Hiro%20pattern.pdf">Hiro pattern</a> and <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Kanji%20pattern.pdf">Kanji pattern</a>.
+<h5>Transformation matrix output</h5>
 
 <p>Number of markers </p>
 <p id="markerNo"></p>
@@ -73,7 +73,7 @@ window.ARThreeOnLoad = function() {
 		}, false);
 
 		var sphere = new THREE.Mesh(
-			new THREE.SphereGeometry(0.5, 8, 8),
+			new THREE.SphereGeometry(0.5, 2, 2),
 			new THREE.MeshNormalMaterial()
 		);
 		sphere.material.shading = THREE.FlatShading;
