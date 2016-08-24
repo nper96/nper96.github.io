@@ -106,9 +106,9 @@ window.ARThreeOnLoad = function() {
 		});
 
 		var tick = function() {
-			arController.process();
+			arScene.process();
 			
-			var matrx = arScene.getTransformationMatrix();
+			var matrx = arController.getTransformationMatrix();
 			console.log(matrx);
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
