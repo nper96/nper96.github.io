@@ -108,6 +108,8 @@ window.ARThreeOnLoad = function() {
 		var tick = function() {
 			arScene.process();
 			
+			var markers = arController.getDetectedMarkers();
+			console.log(markers);
 			var matrx = arController.getTransformationMatrix();
 			console.log(matrx);
 
