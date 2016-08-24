@@ -60,66 +60,34 @@ window.ARThreeOnLoad = function() {
 		}
 
 		document.body.insertBefore(renderer.domElement, document.body.firstChild);
+		
+		// Detect barcode markers
+		arController.setPatternDetectionMode(artoolkit.AR_MATRIX_CODE_DETECTION);
 
-		var rotationV = 0;
-		var rotationTarget = 0;
+		// Process the video frame.
+		arController.detectMarker(video);
 
-		renderer.domElement.addEventListener('click', function(ev) {
-			ev.preventDefault();
-			rotationTarget += 1;
-			
-			//var transMatrx = ev.data.matrix
-			//document.getElementById("mtrxHiro").innerHTML = ev.matrix;
-			//document.getElementById("mtrxKanji").innerHTML = ev.matrix;
-			
-		}, false);
+		var markerMatrix = new Float32Array(12);
+		var glMatrix = new Float32Array(16);
 
-		var sphere = new THREE.Mesh(
-			new THREE.SphereGeometry(0.5, 8, 8),
-			new THREE.MeshNormalMaterial()
-		);
-		sphere.material.shading = THREE.FlatShading;
-		sphere.position.z = 0.5;
+		// Get the number of markers from the ARController and iterate over each marker.
+		var markers = arController.getMarkerNum();
+		for (var i=0; i < markers.length; i++) {
 
-		var torus = new THREE.Mesh(
-			new THREE.TorusGeometry(0.3, 0.2, 8, 8),
-			new THREE.MeshNormalMaterial()
-		);
-		torus.material.shading = THREE.FlatShading;
-		torus.position.z = 0.5;
-		torus.rotation.x = Math.PI/2;
+			var marker = arController.getMarker(i);
 
-		arController.loadMarker('Data/patt.hiro', function(markerId) {
-			var markerRoot = arController.createThreeMarker(markerId);
-			markerRoot.add(sphere);
-			arScene.scene.add(markerRoot);
-			
-			console.log("saw a barcode marker hiro");
-		});
+			// If we found the number 5 marker, let's get its transform matrix.
+			if (marker.idMatrix === 1) {
+				arController.getTransMatSquare(i, 1 /* marker width */, markerMatrix);
 
-		arController.loadMarker('Data/patt.kanji', function(markerId) {
-			var markerRoot = arController.createThreeMarker(markerId);
-			markerRoot.add(torus);
-			arScene.scene.add(markerRoot);
-			
-			console.log("saw a barcode marker kanji");
-		});
+				// And convert it to a WebGL matrix.
+				arController.transMatToGLMat(markerMatrix, glMatrix);
 
-		var tick = function() {
-			arScene.process();
+				// Do something with the glMatrix ...
+				console.log(glMatrix);
 
-			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
-			sphere.rotation.z += rotationV;
-			torus.rotation.y += rotationV;
-			rotationV *= 0.8;
-
-			arScene.renderOn(renderer);
-			requestAnimationFrame(tick);
-		};
-
-		tick();
-
-	}});
+			}
+		}
 
 	delete window.ARThreeOnLoad;
 
