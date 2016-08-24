@@ -37,66 +37,48 @@ html,body {
 
 <script>
 
-window.ARThreeOnLoad = function() {
+var video = ARController.getUserMedia({
+	maxARVideoSize: 320, // do AR processing on scaled down video of this size
+	facing: "environment",
+	onSuccess: function(video) {
+		console.log('got video', video);
+	}
+});
 
-	ARController.getUserMediaThreeScene({maxARVideoSize: 320, cameraParam: 'Data/camera_para-iPhone 5 rear 640x480 1.0m.dat', 
-	onSuccess: function(arScene, arController, arCamera) {
-
-		document.body.className = arController.orientation;
-
-		var renderer = new THREE.WebGLRenderer({antialias: true});
-		if (arController.orientation === 'portrait') {
-			var w = (window.innerWidth / arController.videoHeight) * arController.videoWidth;
-			var h = window.innerWidth;
-			renderer.setSize(w, h);
-			renderer.domElement.style.paddingBottom = (w-h) + 'px';
-		} else {
-			if (/Android|mobile|iPad|iPhone/i.test(navigator.userAgent)) {
-				renderer.setSize(window.innerWidth, (window.innerWidth / arController.videoWidth) * arController.videoHeight);
-			} else {
-				renderer.setSize(arController.videoWidth, arController.videoHeight);
-				document.body.className += ' desktop';
-			}
-		}
-
-		document.body.insertBefore(renderer.domElement, document.body.firstChild);
-		
-		// Detect barcode markers
-		arController.setPatternDetectionMode(artoolkit.AR_MATRIX_CODE_DETECTION);
-
-		// Process the video frame.
-		arController.detectMarker(video);
-
-		var markerMatrix = new Float32Array(12);
-		var glMatrix = new Float32Array(16);
-
-		// Get the number of markers from the ARController and iterate over each marker.
-		var markers = arController.getMarkerNum();
-		for (var i=0; i < markers.length; i++) {
-
-			var marker = arController.getMarker(i);
-
-			// If we found the number 5 marker, let's get its transform matrix.
-			if (marker.idMatrix === 1) {
-				arController.getTransMatSquare(i, 1 /* marker width */, markerMatrix);
-
-				// And convert it to a WebGL matrix.
-				arController.transMatToGLMat(markerMatrix, glMatrix);
-
-				// Do something with the glMatrix ...
-				console.log(glMatrix);
-
-			}
-		}
-
-	delete window.ARThreeOnLoad;
-
-
+var arController = new arController(video, 'Data/camera_para.dat');
+arController.onload = function() {
+	console.log('ARController ready for use', arController);
 };
 
-if (window.ARController && ARController.getUserMediaThreeScene) {
-	ARThreeOnLoad();
+// Detect barcode markers
+arController.setPatternDetectionMode(artoolkit.AR_MATRIX_CODE_DETECTION);
+
+// Process the video frame.
+arController.detectMarker(video);
+
+var markerMatrix = new Float32Array(12);
+var glMatrix = new Float32Array(16);
+
+// Get the number of markers from the ARController and iterate over each marker.
+var markers = arController.getMarkerNum();
+for (var i=0; i < markers.length; i++) {
+
+	var marker = arController.getMarker(i);
+
+	// If we found the number 5 marker, let's get its transform matrix.
+	if (marker.idMatrix === 5) {
+		arController.getTransMatSquare(i, 1 /* marker width */, markerMatrix);
+
+		// And convert it to a WebGL matrix.
+		arController.transMatToGLMat(markerMatrix, glMatrix);
+
+		// Do something with the glMatrix ...
+		console.log("found marker");
+		console.log(glMatrix);
+
+	}
 }
+
 </script>
 
 </body>
