@@ -92,15 +92,15 @@ window.ARThreeOnLoad = function() {
 			markerRoot.add(sphere);
 			arScene.scene.add(markerRoot);
 			
-			console.log("saw a barcode marker hiro");
+			//console.log("saw a barcode marker hiro");
 		});
 
 		arController.loadMarker('Data/patt.kanji', function(markerId) {
 			var markerRoot = arController.createThreeMarker(markerId);
-			markerRoot.add(torus);
+			markerRoot.add(sphere);
 			arScene.scene.add(markerRoot);
 			
-			console.log("saw a barcode marker kanji");
+			//console.log("saw a barcode marker kanji");
 		});
 
 		var tick = function() {
@@ -115,7 +115,7 @@ window.ARThreeOnLoad = function() {
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
 			sphere.rotation.z += rotationV;
-			torus.rotation.y += rotationV;
+			//torus.rotation.y += rotationV;
 			rotationV *= 0.8;
 
 			arScene.renderOn(renderer);
