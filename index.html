@@ -112,7 +112,7 @@ window.ARThreeOnLoad = function() {
 			arController.setPatternDetectionMode(artoolkit.AR_MATRIX_CODE_DETECTION);
 
 			// Process the video frame.
-			arController.detectMarker(video);
+			arController.detectMarker();
 
 			var markerMatrix = new Float32Array(12);
 			var glMatrix = new Float32Array(16);
@@ -124,7 +124,7 @@ window.ARThreeOnLoad = function() {
 				var marker = arController.getMarker(i);
 
 				// If we found the number 5 marker, let's get its transform matrix.
-				if (marker.idMatrix === 1) {
+				if (marker.idMatrix === 0) {
 					arController.getTransMatSquare(i, 1 /* marker width */, markerMatrix);
 
 					// And convert it to a WebGL matrix.
