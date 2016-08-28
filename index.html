@@ -111,7 +111,7 @@ window.ARThreeOnLoad = function() {
 			var markers = arController.getMarkerNum();			
 			//console.log(markers);
 			//get id of last marker
-			if (!(markers == 0)) {
+			if (!(markers === 0)) {
 				var marker = arController.getMarker(markers);
 				var markId = marker.idMatrix;
 				document.getElementById("mId").innerHTML = markId;
