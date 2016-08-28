@@ -34,6 +34,8 @@ html,body {
 <script async src="artoolkit.min.js"></script>
 <script async src="three.min.js"></script>
 <script async src="artoolkit.three.js"></script>
+<script src="artoolkit.debug.js"></script>
+<script src="artoolkit.api.js"></script>
 
 <script>
 
@@ -108,7 +110,7 @@ window.ARThreeOnLoad = function() {
 		var tick = function() {
 			arScene.process();
 			
-			arController.setPatternDetectionMode( artoolkit.AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX );
+			
 			var markers = arController.getMarkerNum();			
 			//console.log(markers);
 			//get id of last marker
