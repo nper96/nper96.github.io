@@ -109,7 +109,7 @@ window.ARThreeOnLoad = function() {
 			var markers = arController.getMarkerNum();			
 			//console.log(markers);
 			document.getElementById("markerNo").innerHTML = markers;
-			var matrx = arController.getTransformationMatrix();
+			var matrx = arController.getCameraMatrix();
 			//console.log(matrx);
 			document.getElementById("mtrx").innerHTML = matrx;
 
