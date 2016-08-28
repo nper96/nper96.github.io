@@ -112,7 +112,7 @@ window.ARThreeOnLoad = function() {
 			//console.log(markers);
 			document.getElementById("markerNo").innerHTML = markers;
 			var matrx = arController.getTransMatSquare(markers,1,markerMatrix);
-			//console.log(matrx);
+			console.log(matrx);
 			document.getElementById("mtrx").innerHTML = matrx;
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
