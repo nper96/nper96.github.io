@@ -26,6 +26,8 @@ html,body {
 
 <p>Number of markers </p>
 <p id="markerNo"></p>
+<p>Marker ID</p>
+<p id="mId"></p>
 <p>Transformation matrix</p>
 <p id="mtrx"></p>
 
@@ -108,8 +110,15 @@ window.ARThreeOnLoad = function() {
 			
 			var markers = arController.getMarkerNum();			
 			//console.log(markers);
+			//get id of last marker
+			if (!(markers == 0)) {
+				var marker = arController.getMarker(markers);
+				var markId = marker.idMatrix;
+				document.getElementById("mId").innerHTML = markId;
+			}
+			
 			document.getElementById("markerNo").innerHTML = markers;
-			var matrx = arController.getTransMatSquare();
+			var matrx = arController.getTransformationMatrix();
 			//console.log(matrx);
 			document.getElementById("mtrx").innerHTML = matrx;
 
