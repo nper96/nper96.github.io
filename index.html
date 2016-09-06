@@ -104,6 +104,8 @@ window.ARThreeOnLoad = function() {
 			
 			//console.log("saw a barcode marker kanji");
 		});
+		
+		arController.setPatternDetectionMode( artoolkit.AR_MATRIX_CODE_DETECTION );
 
 		var tick = function() {
 			arScene.process();
@@ -123,7 +125,7 @@ window.ARThreeOnLoad = function() {
 			console.log(markersArray);
 			//var idMark = arController.patternMarkers;
 			//console.log(idMark);
-			arController.setPatternDetectionMode( artoolkit.AR_MATRIX_CODE_DETECTION );
+			
 			arController.addEventListener('getMarker', function(ev) {
 				var barcodeId = ev.data.marker.idMatrix;
 				if (barcodeId !== -1) {
