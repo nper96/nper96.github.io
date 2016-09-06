@@ -27,6 +27,7 @@ html,body {
 <p>Number of markers </p>
 <p id="markerNo"></p>
 <p>Transformation matrix</p>
+<p id="camMatrx">[]</p>
 <p id="mtrx">[]</p>
 <p id="mtrx2">[]</p>
 
@@ -133,6 +134,9 @@ window.ARThreeOnLoad = function() {
 			} else {
 				document.getElementById("mtrx").innerHTML = [];
 			}
+			
+			var camMat = arController.getCameraMatrix();
+			document.getElementById("camMatrx").innerHTML = camMat;
 			
 	
 
