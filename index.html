@@ -120,9 +120,9 @@ window.ARThreeOnLoad = function() {
 				//console.log(array);
 				markersArray.push(array);
 			}
-			//console.log(markersArray);
-			var detectMarkers = arController.getDetectedMarkers();
-			console.log(detectMarkers);
+			console.log(markersArray);
+			var idMark = arController.cloneMarkerInfo();
+			console.log(idMark);
 			
 			//console.log(markers);
 			document.getElementById("markerNo").innerHTML = markers;
