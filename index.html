@@ -27,7 +27,8 @@ html,body {
 <p>Number of markers </p>
 <p id="markerNo"></p>
 <p>Transformation matrix</p>
-<p id="mtrx"></p>
+<p id="mtrx">[]</p>
+<p id="mtrx2">[]</p>
 
 <script async src="artoolkit.min.js"></script>
 <script async src="three.min.js"></script>
@@ -112,17 +113,28 @@ window.ARThreeOnLoad = function() {
 			
 			var markersArray = [];
 			for (var i=0; i < markers.length; i++) {
-				markersArray.push(arController.getMarker(i));
+				var matrx = arController.getTransMatSquare(i,1,markerMatrix);
+				var array =  Array.prototype.slice.call(matrx);
+				//uncomment below line for python
+				//console.log(array);
+				markersArray.push(array);
 			}
 			console.log(markersArray);
 			
 			//console.log(markers);
 			document.getElementById("markerNo").innerHTML = markers;
-			var matrx = arController.getTransMatSquare(markers,1,markerMatrix);
-			var array =  Array.prototype.slice.call(matrx);
-			//uncomment below line for python
-			//console.log(array);
-			document.getElementById("mtrx").innerHTML = matrx;
+			if (markers.length > 0) {
+				document.getElementById("mtrx").innerHTML = markersArray[0];
+				if (markers.length > 1) {
+					document.getElementById("mtrx2").innerHTML = markersArray[1];
+				} else {
+					document.getElementById("mtrx2").innerHTML = [];
+				}
+			} else {
+				document.getElementById("mtrx").innerHTML = [];
+			}
+			
+	
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
 			sphere.rotation.z += rotationV;
