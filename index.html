@@ -112,7 +112,7 @@ window.ARThreeOnLoad = function() {
 			var markers = arController.getMarkerNum();
 			
 			var markersArray = [];
-			for (var i=0; i < markers.length; i++) {
+			for (var i=0; i < markers; i++) {
 				var matrx = arController.getTransMatSquare(i,1,markerMatrix);
 				var array =  Array.prototype.slice.call(matrx);
 				//uncomment below line for python
@@ -123,9 +123,9 @@ window.ARThreeOnLoad = function() {
 			
 			//console.log(markers);
 			document.getElementById("markerNo").innerHTML = markers;
-			if (markers.length > 0) {
+			if (markers > 0) {
 				document.getElementById("mtrx").innerHTML = markersArray[0];
-				if (markers.length > 1) {
+				if (markers > 1) {
 					document.getElementById("mtrx2").innerHTML = markersArray[1];
 				} else {
 					document.getElementById("mtrx2").innerHTML = [];
