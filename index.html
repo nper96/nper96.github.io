@@ -148,7 +148,7 @@ window.ARThreeOnLoad = function() {
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
 			sphere.rotation.z += rotationV;
-			//torus.rotation.y += rotationV;
+			torus.rotation.y += rotationV;
 			rotationV *= 0.8;
 
 			arScene.renderOn(renderer);
