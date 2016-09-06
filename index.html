@@ -121,8 +121,14 @@ window.ARThreeOnLoad = function() {
 				markersArray.push(array);
 			}
 			console.log(markersArray);
-			var idMark = arController.patternMarkers;
-			console.log(idMark);
+			//var idMark = arController.patternMarkers;
+			//console.log(idMark);
+			arController.addEventListener('getMarker', function(ev) {
+				var barcodeId = ev.data.marker.idMatrix;
+				if (barcodeId !== -1) {
+					console.log("saw a barcode marker with id", barcodeId);
+				}
+			}
 			
 			//console.log(markers);
 			document.getElementById("markerNo").innerHTML = markers;
