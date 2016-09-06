@@ -108,12 +108,20 @@ window.ARThreeOnLoad = function() {
 			
 			
 			var markerMatrix = new Float32Array(12);
-			var markers = arController.getMarkerNum();			
+			var markers = arController.getMarkerNum();
+			
+			var markersArray = [];
+			for (var i=0; i < markers.length; i++) {
+				markersArray.push(arController.getMarker(i));
+			}
+			console.log(markersArray);
+			
 			//console.log(markers);
 			document.getElementById("markerNo").innerHTML = markers;
 			var matrx = arController.getTransMatSquare(markers,1,markerMatrix);
 			var array =  Array.prototype.slice.call(matrx);
-			console.log(array);
+			//uncomment below line for python
+			//console.log(array);
 			document.getElementById("mtrx").innerHTML = matrx;
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
