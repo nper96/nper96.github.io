@@ -82,7 +82,7 @@ window.ARThreeOnLoad = function() {
 		sphere.position.z = 0.5;
 
 		var torus = new THREE.Mesh(
-			new THREE.TorusGeometry(0.03, 0.02, 0.8, 0.8),
+			new THREE.TorusGeometry(0.3, 0.2, 8, 8),
 			new THREE.MeshNormalMaterial()
 		);
 		torus.material.shading = THREE.FlatShading;
@@ -124,9 +124,12 @@ window.ARThreeOnLoad = function() {
 			console.log(markersArray);
 			//var idMark = arController.patternMarkers;
 			//console.log(idMark);
-			arController.addEventListener('getMarker', function (ev) {
-				console.log('found marker?', ev);
-				});
+			arController.addEventListener('getMarker', function(ev) {
+				var barcodeId = ev.data.marker.idMatrix;
+				if (barcodeId !== -1) {
+					console.log("saw a barcode marker with id", barcodeId);
+				}
+			});
 			
 			//console.log(markers);
 			document.getElementById("markerNo").innerHTML = markers;
