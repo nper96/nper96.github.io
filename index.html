@@ -138,10 +138,10 @@ window.ARThreeOnLoad = function() {
 				if (markers > 1) {
 					document.getElementById("mtrx2").innerHTML = markersArray[1];
 				} else {
-					document.getElementById("mtrx2").innerHTML = [];
+					document.getElementById("mtrx2").innerHTML = [0,0,0,0,0,0,0,0,0,0,0,0];
 				}
 			} else {
-				document.getElementById("mtrx").innerHTML = [];
+				document.getElementById("mtrx").innerHTML = [0,0,0,0,0,0,0,0,0,0,0,0];
 			}
 			
 			var camMat = arController.getCameraMatrix();
