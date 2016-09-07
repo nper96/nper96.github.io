@@ -124,7 +124,7 @@ window.ARThreeOnLoad = function() {
 			console.log(markersArray);
 			//var idMark = arController.patternMarkers;
 			//console.log(idMark);
-			arController.setPatternDetectionMode( artoolkit.AR_MATRIX_CODE_DETECTION );
+			arController.setPatternDetectionMode( artoolkit.AR_MATRIX_CODE_4x4 );
 			arController.addEventListener('getMarker', function(ev) {
 				var barcodeId = ev.data.marker.idMatrix;
 				if (barcodeId !== -1) {
