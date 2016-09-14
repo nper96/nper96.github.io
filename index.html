@@ -145,9 +145,11 @@ window.ARThreeOnLoad = function() {
 				document.getElementById("mtrx").innerHTML = [0,0,0,0,0,0,0,0,0,0,0,0];
 			}
 			
-			var camMat = arController.getCameraMatrix();
-			document.getElementById("camMatrx").innerHTML = camMat;
-			
+			//	var camMat = arController.getCameraMatrix();
+			//document.getElementById("camMatrx").innerHTML = camMat;
+			 var threeCamera = scene.getCamera().position;
+			document.getElementById("camMatrx").innerHTML = threeCamera;
+			 
 	
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
