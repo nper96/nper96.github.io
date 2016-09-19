@@ -52,10 +52,6 @@ top: 0px;
 
 <script>
 if (window.DeviceOrientationEvent) {
-  // Listen for the event and handle DeviceOrientationEvent object
-  window.addEventListener('deviceorientation', devOrientHandler, false);
-}
-if (window.DeviceOrientationEvent) {
   // Listen for the deviceorientation event and handle the raw data
   window.addEventListener('deviceorientation', function(eventData) {
     // gamma is the left-to-right tilt in degrees, where right is positive
