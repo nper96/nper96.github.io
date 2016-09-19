@@ -157,10 +157,10 @@ window.ARThreeOnLoad = function() {
 				document.getElementById("mtrx").innerHTML = [0,0,0,0,0,0,0,0,0,0,0,0];
 			}
 			
-			//	var camMat = arController.getCameraMatrix();
-			//document.getElementById("camMatrx").innerHTML = camMat;
-			var threeCamera = scene.getCamera().position;
-			document.getElementById("camMatrx").innerHTML = threeCamera;
+			var camMat = arController.getCameraMatrix();
+			document.getElementById("camMatrx").innerHTML = camMat;
+			//var threeCamera = scene.getCamera().position;
+			//document.getElementById("camMatrx").innerHTML = threeCamera;
 			
 			var can = document.getElementById('myCanvas');
 			can.height = 100; can.width = 200;
