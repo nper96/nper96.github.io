@@ -129,10 +129,12 @@ window.ARThreeOnLoad = function() {
 		var tick = function() {
 			arScene.process();
 			
-			
+			//object to hold 12 element matrix
 			var markerMatrix = new Float32Array(12);
+			//number of marker in scene
 			var markers = arController.getMarkerNum();
 			
+			//getting transmat of each marker into an array
 			var markersArray = [];
 			for (var i=0; i < markers; i++) {
 				var matrx = arController.getTransMatSquare(i,1,markerMatrix);
@@ -141,18 +143,13 @@ window.ARThreeOnLoad = function() {
 				//console.log(array);
 				markersArray.push(array);
 			}
-			console.log(markersArray);
-			//var idMark = arController.patternMarkers;
-			//console.log(idMark);
-			arController.setPatternDetectionMode( artoolkit.AR_MATRIX_CODE_4x4 );
-			arController.addEventListener('getMarker', function(ev) {
-				var barcodeId = ev.data.marker.idMatrix;
-				if (barcodeId !== -1) {
-					console.log("saw a barcode marker with id", barcodeId);
-				}
+			//console.log(markersArray);
 			});
 			
+			//print list of transmats
 			//console.log(markers);
+			
+			//displaying matrices on page
 			document.getElementById("markerNo").innerHTML = markers;
 			if (markers > 0) {
 				document.getElementById("mtrx").innerHTML = markersArray[0];
@@ -165,6 +162,7 @@ window.ARThreeOnLoad = function() {
 				document.getElementById("mtrx").innerHTML = [0,0,0,0,0,0,0,0,0,0,0,0];
 			}
 			
+			//displaying static camera matrix
 			var camMat = arController.getCameraMatrix();
 			document.getElementById("camMatrx").innerHTML = camMat;
 			//var threeCamera = scene.getCamera().position;
@@ -172,11 +170,14 @@ window.ARThreeOnLoad = function() {
 			
 			
 			//drawing dot
-			
+			//get position of marker
 			if (markers > 0) {
 				x = markersArray[0][3]
+				console.log(x)
+				//y = markersArray[0][7]
 			} else {
 				x = 50
+				//y = 50
 			}
 			ctx.fillStyle = "rgba(34,45,23,0.4)";
 			ctx.fillRect(0, 0, can.width, can.height);
@@ -188,7 +189,7 @@ window.ARThreeOnLoad = function() {
 			ctx.fillStyle = 'rgba(250,0,0,0.4)';
 			ctx.fill();
 			 
-	
+			//original code for drawing on markers below
 
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
 			sphere.rotation.z += rotationV;
