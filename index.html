@@ -174,7 +174,7 @@ window.ARThreeOnLoad = function() {
 			//get position of marker
 			if (markers > 0) {
 				x = markersArray[0][3]
-				console.log(x)
+				//console.log(x)
 				//y = markersArray[0][7]
 			} else {
 				x = 50
@@ -191,25 +191,19 @@ window.ARThreeOnLoad = function() {
 			ctx.fill();
 			 
 			// gyro
-			if (window.DeviceOrientationEvent) {
-			// Listen for the deviceorientation event and handle the raw data
-				window.addEventListener('deviceorientation', function(eventData) {
-					// gamma is the left-to-right tilt in degrees, where right is positive
-					var tiltLR = eventData.gamma;
-
-					// beta is the front-to-back tilt in degrees, where front is positive
-					var tiltFB = eventData.beta;
-
-					// alpha is the compass direction the device is facing in degrees
-					var dir = eventData.alpha
-
-					// call our orientation event handler
-					deviceOrientationHandler(tiltLR, tiltFB, dir);
-				}, false);
-			}	 
-			document.getElementById("alpha").innerHTML = Math.round(dir);
-			document.getElementById("beta").innerHTML = Math.round(tiltFB);
-			document.getElementById("gamma").innerHTML = Math.round(tiltLR);
+			if(window.DeviceOrientationEvent){
+				window.addEventListener("deviceorientation", orientation, false);
+			}else{
+				console.log("DeviceOrientationEvent is not supported");
+			}
+			
+			function orientation(event){
+				console.log("Magnetometer: "
+					+ event.alpha + ", "
+					+ event.beta + ", "
+					+ event.gamma
+				);
+			}
 			
 			 
 			//original code for drawing on markers below
