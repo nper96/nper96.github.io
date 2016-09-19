@@ -39,6 +39,7 @@ top: 0px;
 <p>Number of markers </p>
 <p id="markerNo"></p>
 <p>Transformation matrix</p>
+<p id="gyro"></p>
 <p id="camMatrx">[]</p>
 <p id="mtrx">[]</p>
 <p id="mtrx2">[]</p>
@@ -48,6 +49,9 @@ top: 0px;
 <script async src="artoolkit.three.js"></script>
 
 <script>
+if (window.DeviceOrientationEvent) {
+ console.log("DeviceOrientation is supported");
+}
 
 //init canvas
 var can = document.getElementById('myCanvas');
