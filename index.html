@@ -51,28 +51,6 @@ top: 0px;
 <script async src="artoolkit.three.js"></script>
 
 <script>
-if (window.DeviceOrientationEvent) {
-  // Listen for the deviceorientation event and handle the raw data
-  window.addEventListener('deviceorientation', function(eventData) {
-    // gamma is the left-to-right tilt in degrees, where right is positive
-    var tiltLR = eventData.gamma;
-
-    // beta is the front-to-back tilt in degrees, where front is positive
-    var tiltFB = eventData.beta;
-
-    // alpha is the compass direction the device is facing in degrees
-    var dir = eventData.alpha
-
-    // call our orientation event handler
-    deviceOrientationHandler(tiltLR, tiltFB, dir);
-  }, false);
-} 
-
-document.getElementById("alpha").innerHTML = Math.round(dir);
-document.getElementById("beta").innerHTML = Math.round(tiltFB);
-document.getElementById("gamma").innerHTML = Math.round(tiltLR);
-
-
 //init canvas
 var can = document.getElementById('myCanvas');
 can.height = 200; can.width = 400;
@@ -211,6 +189,28 @@ window.ARThreeOnLoad = function() {
 			ctx.arc(x, y, 3, 0, 2 * Math.PI);
 			ctx.fillStyle = 'rgba(250,0,0,0.4)';
 			ctx.fill();
+			 
+			// gyro
+			if (window.DeviceOrientationEvent) {
+			// Listen for the deviceorientation event and handle the raw data
+				window.addEventListener('deviceorientation', function(eventData) {
+					// gamma is the left-to-right tilt in degrees, where right is positive
+					var tiltLR = eventData.gamma;
+
+					// beta is the front-to-back tilt in degrees, where front is positive
+					var tiltFB = eventData.beta;
+
+					// alpha is the compass direction the device is facing in degrees
+					var dir = eventData.alpha
+
+					// call our orientation event handler
+					deviceOrientationHandler(tiltLR, tiltFB, dir);
+				}, false);
+			}	 
+			document.getElementById("alpha").innerHTML = Math.round(dir);
+			document.getElementById("beta").innerHTML = Math.round(tiltFB);
+			document.getElementById("gamma").innerHTML = Math.round(tiltLR);
+			
 			 
 			//original code for drawing on markers below
 
