@@ -174,11 +174,25 @@ window.ARThreeOnLoad = function() {
 			//document.getElementById("camMatrx").innerHTML = threeCamera;
 			
 			
+			// gyro
+			if(window.DeviceOrientationEvent){
+				window.addEventListener("deviceorientation", orientation, false);
+			}else{
+				console.log("DeviceOrientationEvent is not supported");
+			}
+			
+			function orientation(event){
+				document.getElementById("alpha").innerHTML = event.alpha;
+				document.getElementById("beta").innerHTML = event.beta;
+				document.getElementById("gamma").innerHTML = event.gamma;
+			}
+			
+			
 			//drawing dot
 			//get position of marker
 			if (markers > 0) {
 				x = markersArray[0][3]
-				//console.log(x)
+				console.log(x)
 				//y = markersArray[0][7]
 			} else {
 				x = 50
@@ -193,26 +207,7 @@ window.ARThreeOnLoad = function() {
 			ctx.arc(x, y, 3, 0, 2 * Math.PI);
 			ctx.fillStyle = 'rgba(250,0,0,0.4)';
 			ctx.fill();
-			 
-			// gyro
-			if(window.DeviceOrientationEvent){
-				window.addEventListener("deviceorientation", orientation, false);
-			}else{
-				console.log("DeviceOrientationEvent is not supported");
-			}
-			
-			function orientation(event){
-				console.log("Magnetometer: "
-					+ event.alpha + ", "
-					+ event.beta + ", "
-					+ event.gamma
-				);
-				document.getElementById("alpha").innerHTML = event.alpha;
-				document.getElementById("beta").innerHTML = event.beta;
-				document.getElementById("gamma").innerHTML = event.gamma;
-				
-			}
-			
+			 			
 			 
 			//original code for drawing on markers below
 
