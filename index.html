@@ -18,9 +18,21 @@ html,body {
 .desktop canvas {
  	transform: scale(-1, 1);
 }
+
+#myCanvas {
+position: absolute;
+background:rgba(34,45,23,0.4)
+border:1px solid #000000;
+right: 0px;
+top: 0px;
+}
+
 </style>
 </head>
 <body>
+
+<canvas id="myCanvas" width="400" height="200">
+</canvas>
 
 <h5>Transformation matrix output</h5>
 
@@ -147,8 +159,29 @@ window.ARThreeOnLoad = function() {
 			
 			//	var camMat = arController.getCameraMatrix();
 			//document.getElementById("camMatrx").innerHTML = camMat;
-			 var threeCamera = scene.getCamera().position;
+			var threeCamera = scene.getCamera().position;
 			document.getElementById("camMatrx").innerHTML = threeCamera;
+			
+			var can = document.getElementById('myCanvas');
+			can.height = 100; can.width = 200;
+			var ctx = can.getContext('2d');
+			var x = 10, y = 100;
+			ctx.fillStyle = "black";
+			ctx.fillRect(700, 100, 100, 100);
+
+			function draw() {
+				ctx.beginPath();
+				ctx.arc(x, y, 3, 0, 2 * Math.PI);
+				ctx.fillStyle = 'rgba(250,0,0,0.4)';
+				ctx.fill();
+
+				x += 2;
+				ctx.fillStyle = "rgba(34,45,23,0.4)";
+				ctx.fillRect(0, 0, can.width, can.height);
+				requestAnimationFrame(draw);
+				//ctx.clearRect(0,0,can.width,can.height);
+			}
+			draw();
 			 
 	
 
