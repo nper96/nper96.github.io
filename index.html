@@ -64,7 +64,7 @@ top: 825px;
 var can = document.getElementById('myCanvas');
 can.height = 300; can.width = 650;
 var ctx = can.getContext('2d');
-var x = 10, y = 100;
+var x = 325, y = 150;
 ctx.fillStyle = "black";
 ctx.fillRect(700, 100, 100, 100);
 
@@ -221,7 +221,7 @@ window.ARThreeOnLoad = function() {
 			//ctx.clearRect(0,0,can.width,can.height);
 
 			ctx.beginPath();
-			ctx.arc(canvasX, canvasY, 3, 0, 2 * Math.PI);
+			ctx.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
 			ctx.fillStyle = 'rgba(250,0,0,0.4)';
 			ctx.fill();
 			 			
