@@ -36,7 +36,7 @@ top: 725px;
 </head>
 <body>
 
-<canvas id="myCanvas" width="400" height="200">
+<canvas id="myCanvas">
 </canvas>
 <div id="textBox">
 <h5>Transformation matrix output</h5>
@@ -62,7 +62,7 @@ top: 725px;
 <script>
 //init canvas
 var can = document.getElementById('myCanvas');
-can.height = 300; can.width = 550;
+can.height = 300; can.width = 650;
 var ctx = can.getContext('2d');
 var x = 10, y = 100;
 ctx.fillStyle = "black";
