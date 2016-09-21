@@ -27,13 +27,17 @@ left: 375px;
 top: 500px;
 }
 
+#textBox {
+top: 725px;
+}
+
 </style>
 </head>
 <body>
 
 <canvas id="myCanvas" width="400" height="200">
 </canvas>
-
+<div id="textBox">
 <h5>Transformation matrix output</h5>
 <p><b>Gyroscope data</b></p>
 <p>Alpha - rotational direction (0 to 360)</p>
@@ -48,6 +52,7 @@ top: 500px;
 <p id="camMatrx">[]</p>
 <p id="mtrx">[]</p>
 <p id="mtrx2">[]</p>
+</div>
 
 <script async src="artoolkit.min.js"></script>
 <script async src="three.min.js"></script>
