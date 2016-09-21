@@ -196,9 +196,13 @@ window.ARThreeOnLoad = function() {
 			//drawing dot
 			//get position of marker
 			if (markers > 0) {
-				x = markersArray[0][3];
-				var xRange = [x,markersArray[0][11]];
-				console.log(xRange);
+				var xRange = markersArray[0][11];
+				x = (markersArray[0][3]) + (xRange/2);
+				//change below if you change the canvas size
+				var canvasWidth = 650;
+				var canvasX = (x/xRange)*canvasWidth;
+				//var xRanges = [x,markersArray[0][11]];
+				console.log(canvasX);
 				//y = markersArray[0][7];
 			} else {
 				x = 50;
