@@ -196,17 +196,24 @@ window.ARThreeOnLoad = function() {
 			//drawing dot
 			//get position of marker
 			if (markers > 0) {
-				var xRange = markersArray[0][11];
-				x = (markersArray[0][3]) + (xRange/2);
+				var range = markersArray[0][11];
+				
+				//get x
+				x = (markersArray[0][3]) + (range/2);
 				//change below if you change the canvas size
 				var canvasWidth = 650;
-				var canvasX = (x/xRange)*canvasWidth;
+				var canvasX = (x/range)*canvasWidth;
 				//var xRanges = [x,markersArray[0][11]];
-				console.log(canvasX);
-				//y = markersArray[0][7];
+				
+				//get y
+				y = (markersArray[0][7]) + (range/2);
+				//change below if you change the canvas size
+				var canvasHeight = 300;
+				var canvasY = (y/range)*canvasHeight;
+				console.log(canvasY);
 			} else {
 				canvasX = 325;
-				//y = 150;
+				canvasY = 150;
 			}
 			ctx.fillStyle = "rgba(34,45,23,0.4)";
 			ctx.fillRect(0, 0, can.width, can.height);
@@ -214,7 +221,7 @@ window.ARThreeOnLoad = function() {
 			//ctx.clearRect(0,0,can.width,can.height);
 
 			ctx.beginPath();
-			ctx.arc(canvasX, y, 3, 0, 2 * Math.PI);
+			ctx.arc(canvasX, canvasY, 3, 0, 2 * Math.PI);
 			ctx.fillStyle = 'rgba(250,0,0,0.4)';
 			ctx.fill();
 			 			
