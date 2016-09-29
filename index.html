@@ -193,10 +193,10 @@ window.ARThreeOnLoad = function() {
 				//determining the screen
 				var rotationVal = event.alpha;
 				var screenNo = 0;
-				if(((rotationVal<=330)&&(rotationVal>=170))||(markers>0)){
+				if(((rotationVal<=294)&&(rotationVal>=120))||(markers>5)){
 					screenNo = 3;
 					document.getElementById("screen").innerHTML = "Right";
-				}else if(((rotationVal<=360)&&(rotationVal>=315))){
+				}else if(((rotationVal<=355)&&(rotationVal>=315))){
 					screenNo = 2;
 					document.getElementById("screen").innerHTML = "Middle";
 				}else if((rotationVal<=75)&&(rotationVal>=5)){
