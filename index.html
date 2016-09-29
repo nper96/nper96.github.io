@@ -38,7 +38,7 @@ top: 500px;
 <canvas id="myCanvas">
 </canvas>
 <div id="textBox">
-<p id="screen"></p>
+<p id="screen">None</p>
 <p>Alpha - rotational direction (0 to 360)</p>
 <p id="alpha"></p>
 <p>Beta - front to back motion (-180 to 180)</p>
@@ -189,7 +189,25 @@ window.ARThreeOnLoad = function() {
 				document.getElementById("alpha").innerHTML = event.alpha;
 				document.getElementById("beta").innerHTML = event.beta;
 				document.getElementById("gamma").innerHTML = event.gamma;
+				
+				//determining the screen
+				var rotationVal = event.alpha;
+				var screenNo = 0;
+				if(((rotationVal<=330)&&(rotationVal>=323))||(markers>0)){
+					screenNo = 3;
+					document.getElementById("screen").innerHTML = "Right";
+				}else if`((rotationVal<=357)&&(rotationVal>=337)){
+					screenNo = 2;
+					document.getElementById("screen").innerHTML = "Middle";
+				}else if((rotationVal<=48)&&(rotationVal>=21)){
+					screenNo = 1;
+					document.getElementById("screen").innerHTML = "Left";
+				}else{
+					screenNo = 0;
+					document.getElementById("screen").innerHTML = "None";
+				}
 			}
+			
 			
 			
 			//drawing dot
