@@ -196,20 +196,35 @@ window.ARThreeOnLoad = function() {
 				if(((rotationVal<=297)&&(rotationVal>=105))||(markers>5)){
 					screenNo = 3;
 					document.getElementById("screen").innerHTML = "Right";
+					x = ((event.alpha/192)*216)+432
 				}else if(((rotationVal<=360)&&(rotationVal>=310))){
 					screenNo = 2;
 					document.getElementById("screen").innerHTML = "Middle";
+					x = ((event.alpha/50)*216)+216
 				}else if((rotationVal<=75)&&(rotationVal>=5)){
 					screenNo = 1;
 					document.getElementById("screen").innerHTML = "Left";
+					x = (event.alpha/70)*216
 				}else{
 					screenNo = 0;
 					document.getElementById("screen").innerHTML = "None";
+					x = 325
 				}
 				//console.log(screenNo);
+				//drawing dot
+				
+				ctx.fillStyle = "rgba(34,45,23,0.4)";
+				ctx.fillRect(0, 0, can.width, can.height);
+				//requestAnimationFrame(draw);
+				//ctx.clearRect(0,0,can.width,can.height);
+
+				ctx.beginPath();
+				ctx.arc(x, y, 7, 0, 2 * Math.PI);
+				ctx.fillStyle = 'rgba(250,0,0,0.4)';
+				ctx.fill();
 			}
 			
-			
+			/**
 			
 			//drawing dot
 			//get position of marker
@@ -242,7 +257,8 @@ window.ARThreeOnLoad = function() {
 			ctx.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
 			ctx.fillStyle = 'rgba(250,0,0,0.4)';
 			ctx.fill();
-			 			
+			
+			**/
 			 
 			//original code for drawing on markers below
 
