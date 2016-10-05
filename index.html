@@ -198,15 +198,15 @@ window.ARThreeOnLoad = function() {
 				if(((rotationVal<=297)&&(rotationVal>=105))||(markers>5)){
 					screenNo = 3;
 					document.getElementById("screen").innerHTML = "Right";
-					x = ((event.alpha/192)*216)+432
+					x = (((event.alpha - 191)/192)*216)+432
 				}else if(((rotationVal<=360)&&(rotationVal>=310))){
 					screenNo = 2;
 					document.getElementById("screen").innerHTML = "Middle";
-					x = ((event.alpha/50)*216)+216
+					x = (((event.alpha - 310)/50)*216)+216
 				}else if((rotationVal<=75)&&(rotationVal>=5)){
 					screenNo = 1;
 					document.getElementById("screen").innerHTML = "Left";
-					x = (event.alpha/70)*216
+					x = ((event.alpha - 5)/70)*216
 				}else{
 					screenNo = 0;
 					document.getElementById("screen").innerHTML = "None";
