@@ -69,6 +69,8 @@ var x = 325, y = 150;
 ctx.fillStyle = "black";
 ctx.fillRect(700, 100, 100, 100);
 
+var screenNo = 0;
+
 window.ARThreeOnLoad = function() {
 
 	ARController.getUserMediaThreeScene({maxARVideoSize: 320, cameraParam: 'Data/camera_para-iPhone 5 rear 640x480 1.0m.dat', 
@@ -194,7 +196,7 @@ window.ARThreeOnLoad = function() {
 				
 				//determining the screen
 				var rotationVal = event.alpha;
-				var screenNo = 0;
+				var oldScreen = screenNo;
 				if(((rotationVal<=297)&&(rotationVal>=105))||(markers>5)){
 					screenNo = 3;
 					document.getElementById("screen").innerHTML = "Right";
@@ -212,7 +214,11 @@ window.ARThreeOnLoad = function() {
 					document.getElementById("screen").innerHTML = "None";
 					x = 325
 				}
-				ws.send(screenNo);
+				if (!(oldScreen == screenNo)){
+					oldScreen = screenNo;
+					ws.send(screenNo);
+				}
+				
 				//console.log(x);
 				//drawing dot
 				
@@ -279,7 +285,6 @@ window.ARThreeOnLoad = function() {
 	}});
 
 	delete window.ARThreeOnLoad;
-
 
 };
 
