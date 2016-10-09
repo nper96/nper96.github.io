@@ -38,13 +38,13 @@ var dummyVar = 0;
 var screenNo = 0;
 			
 // gyro
-if(window.DeviceOrientationEvent){
-	window.addEventListener("deviceorientation", orientation, false);
-}else{
-	console.log("DeviceOrientationEvent is not supported");
-}
 
 while (dummyVar==0){
+	if(window.DeviceOrientationEvent){
+		window.addEventListener("deviceorientation", orientation, false);
+	}else{
+		console.log("DeviceOrientationEvent is not supported");
+	}
 	function orientation(event){
 		document.getElementById("alpha").innerHTML = event.alpha;
 		document.getElementById("beta").innerHTML = event.beta;
