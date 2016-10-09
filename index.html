@@ -41,7 +41,7 @@ top: 50px;
 </div>
 
 <script>
-var ws = new WebSocket("ws://43.246.234.208:81?type=tracker");
+//var ws = new WebSocket("ws://43.246.234.208:81?type=tracker");
 
 
 var screenNo = 0;
@@ -81,7 +81,7 @@ while (0==0){
 		}
 		if (!(oldScreen == screenNo)){
 			oldScreen = screenNo;
-			ws.send(screenNo);
+			//ws.send(screenNo);
 		}
 		
 		//console.log(x);
