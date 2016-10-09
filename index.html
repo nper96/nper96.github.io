@@ -11,13 +11,6 @@ html,body {
 	overflow-x: hidden;
 	background-color: #F5F1C4;
 }
-.portrait canvas {
-	transform-origin: 0 0;
-	transform: rotate(-90deg) translateX(-100%);
-}
-.desktop canvas {
- 	transform: scale(-1, 1);
-}
 
 #textBox {
 position: absolute;
@@ -62,7 +55,7 @@ while (dummyVar==0){
 		//determining the screen
 		var rotationVal = event.alpha;
 		var oldScreen = screenNo;
-		if(((rotationVal<=297)&&(rotationVal>=105))||(markers>5)){
+		if((rotationVal<=297)&&(rotationVal>=105)){
 			screenNo = 3;
 			document.getElementById("screen").innerHTML = "Right";
 			//x = (((event.alpha - 191)/192)*216)+432
