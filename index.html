@@ -39,44 +39,42 @@ var screenNo = 0;
 			
 // gyro
 
-while (dummyVar==0){
-	if(window.DeviceOrientationEvent){
-		window.addEventListener("deviceorientation", orientation, false);
+if(window.DeviceOrientationEvent){
+	window.addEventListener("deviceorientation", orientation, false);
+}else{
+	console.log("DeviceOrientationEvent is not supported");
+}
+function orientation(event){
+	document.getElementById("alpha").innerHTML = event.alpha;
+	document.getElementById("beta").innerHTML = event.beta;
+	document.getElementById("gamma").innerHTML = event.gamma;
+	
+	//determining the screen
+	var rotationVal = event.alpha;
+	var oldScreen = screenNo;
+	if((rotationVal<=297)&&(rotationVal>=105)){
+		screenNo = 3;
+		document.getElementById("screen").innerHTML = "Right";
+		//x = (((event.alpha - 191)/192)*216)+432
+	}else if(((rotationVal<=360)&&(rotationVal>=310))){
+		screenNo = 2;
+		document.getElementById("screen").innerHTML = "Middle";
+		//x = (((event.alpha - 310)/50)*216)+216
+	}else if((rotationVal<=75)&&(rotationVal>=5)){
+		screenNo = 1;
+		document.getElementById("screen").innerHTML = "Left";
+		//x = ((event.alpha - 5)/70)*216
 	}else{
-		console.log("DeviceOrientationEvent is not supported");
+		screenNo = 0;
+		document.getElementById("screen").innerHTML = "None";
+		//x = 325
 	}
-	function orientation(event){
-		document.getElementById("alpha").innerHTML = event.alpha;
-		document.getElementById("beta").innerHTML = event.beta;
-		document.getElementById("gamma").innerHTML = event.gamma;
-		
-		//determining the screen
-		var rotationVal = event.alpha;
-		var oldScreen = screenNo;
-		if((rotationVal<=297)&&(rotationVal>=105)){
-			screenNo = 3;
-			document.getElementById("screen").innerHTML = "Right";
-			//x = (((event.alpha - 191)/192)*216)+432
-		}else if(((rotationVal<=360)&&(rotationVal>=310))){
-			screenNo = 2;
-			document.getElementById("screen").innerHTML = "Middle";
-			//x = (((event.alpha - 310)/50)*216)+216
-		}else if((rotationVal<=75)&&(rotationVal>=5)){
-			screenNo = 1;
-			document.getElementById("screen").innerHTML = "Left";
-			//x = ((event.alpha - 5)/70)*216
-		}else{
-			screenNo = 0;
-			document.getElementById("screen").innerHTML = "None";
-			//x = 325
-		}
-		if (!(oldScreen == screenNo)){
-			oldScreen = screenNo;
-			//ws.send(screenNo);
-		}
-		
-		//console.log(x);
+	if (!(oldScreen == screenNo)){
+		oldScreen = screenNo;
+		//ws.send(screenNo);
 	}
+	
+	//console.log(x);
 }
 	
 
