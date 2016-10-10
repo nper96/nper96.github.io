@@ -137,6 +137,7 @@ window.ARThreeOnLoad = function() {
 			//var markerMatrix = new Float32Array(12);
 			//number of marker in scene
 			var markers = arController.getMarkerNum();
+			document.getElementById("markerNo").innerHTML = markers;
 			
 			/**
 			
@@ -186,7 +187,7 @@ window.ARThreeOnLoad = function() {
 			if(markers == 3){
 				screenNo = 3;
 				document.getElementById("screen").innerHTML = "Right";
-				x = 500;
+				x = 100;
 			}else if(markers == 2){
 				screenNo = 2;
 				document.getElementById("screen").innerHTML = "Middle";
@@ -194,7 +195,7 @@ window.ARThreeOnLoad = function() {
 			}else if(markers == 1){
 				screenNo = 1;
 				document.getElementById("screen").innerHTML = "Left";
-				x = 100;
+				x = 500;
 			}else{
 				screenNo = 0;
 				//document.getElementById("screen").innerHTML = "None";
