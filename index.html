@@ -186,15 +186,15 @@ window.ARThreeOnLoad = function() {
 			if(markers == 3){
 				screenNo = 3;
 				document.getElementById("screen").innerHTML = "Right";
-				x = 500
+				x = 500;
 			}else if(markers == 2){
 				screenNo = 2;
 				document.getElementById("screen").innerHTML = "Middle";
-				x = 325
+				x = 325;
 			}else if(markers == 1){
 				screenNo = 1;
 				document.getElementById("screen").innerHTML = "Left";
-				x = 100
+				x = 100;
 			}else{
 				screenNo = 0;
 				//document.getElementById("screen").innerHTML = "None";
@@ -214,6 +214,7 @@ window.ARThreeOnLoad = function() {
 				ctx.arc(x, y, 7, 0, 2 * Math.PI);
 				ctx.fillStyle = 'rgba(250,0,0,0.4)';
 				ctx.fill();
+				//console.log(x);
 			}
 			
 			//console.log(x);
