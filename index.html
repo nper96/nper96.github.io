@@ -11,76 +11,275 @@ html,body {
 	overflow-x: hidden;
 	background-color: #F5F1C4;
 }
+.portrait canvas {
+	transform-origin: 0 0;
+	transform: rotate(-90deg) translateX(-100%);
+}
+.desktop canvas {
+ 	transform: scale(-1, 1);
+}
+
+#myCanvas {
+background:rgba(34,45,23,0.4)
+border:1px solid #000000;
+left: 350px;
+top: 500px;
+}
 
 #textBox {
 position: absolute;
-top: 50px;
+top: 500px;
 }
 
 </style>
 </head>
 <body>
 
+<canvas id="myCanvas">
+</canvas>
 <div id="textBox">
 <p id="screen">None</p>
-<p>Alpha - rotational direction (0 to 360)</p>
-<p id="alpha"></p>
-<p>Beta - front to back motion (-180 to 180)</p>
-<p id="beta"></p>
-<p>Gamma - left to right motion (-90 to 90)</p>
-<p id="gamma"></p>
+<p>Number of markers </p>
+<p id="markerNo"></p>
 </div>
 
+<script async src="artoolkit.min.js"></script>
+<script async src="three.min.js"></script>
+<script async src="artoolkit.three.js"></script>
+
 <script>
-//gyro only index
-var ws = new WebSocket("ws://43.246.234.208:81?type=tracker");
-var dummyVar = 0;
+//without websocket
+//var ws = new WebSocket("ws://43.246.234.208:81?type=tracker");
+
+//init canvas
+var can = document.getElementById('myCanvas');
+can.height = 300; can.width = 650;
+var ctx = can.getContext('2d');
+var x = 325, y = 150;
+ctx.fillStyle = "black";
+ctx.fillRect(700, 100, 100, 100);
 
 var screenNo = 0;
+
+window.ARThreeOnLoad = function() {
+
+	ARController.getUserMediaThreeScene({maxARVideoSize: 320, cameraParam: 'Data/camera_para-iPhone 5 rear 640x480 1.0m.dat', 
+	onSuccess: function(arScene, arController, arCamera) {
+
+		document.body.className = arController.orientation;
+
+		var renderer = new THREE.WebGLRenderer({antialias: true});
+		if (arController.orientation === 'portrait') {
+			var w = (window.innerWidth / arController.videoHeight) * arController.videoWidth;
+			var h = window.innerWidth;
+			renderer.setSize(w, h);
+			renderer.domElement.style.paddingBottom = (w-h) + 'px';
+		} else {
+			if (/Android|mobile|iPad|iPhone/i.test(navigator.userAgent)) {
+				renderer.setSize(window.innerWidth, (window.innerWidth / arController.videoWidth) * arController.videoHeight);
+			} else {
+				renderer.setSize(arController.videoWidth, arController.videoHeight);
+				document.body.className += ' desktop';
+			}
+		}
+
+		document.body.insertBefore(renderer.domElement, document.body.firstChild);
+
+		var rotationV = 0;
+		var rotationTarget = 0;
+
+		renderer.domElement.addEventListener('click', function(ev) {
+			ev.preventDefault();
+			rotationTarget += 1;
 			
-// gyro
+			//var transMatrx = ev.data.matrix
+			//document.getElementById("mtrxHiro").innerHTML = ev.matrix;
+			//document.getElementById("mtrxKanji").innerHTML = ev.matrix;
+			
+		}, false);
 
-if(window.DeviceOrientationEvent){
-	window.addEventListener("deviceorientation", orientation, false);
-}else{
-	console.log("DeviceOrientationEvent is not supported");
-}
-function orientation(event){
-	document.getElementById("alpha").innerHTML = event.alpha;
-	document.getElementById("beta").innerHTML = event.beta;
-	document.getElementById("gamma").innerHTML = event.gamma;
-	
-	//determining the screen
-	var rotationVal = event.alpha;
-	var oldScreen = screenNo;
-	if((rotationVal<=297)&&(rotationVal>=105)){
-		screenNo = 3;
-		document.getElementById("screen").innerHTML = "Right";
-		//x = (((event.alpha - 191)/192)*216)+432
-	}else if(((rotationVal<=360)&&(rotationVal>=310))){
-		screenNo = 2;
-		document.getElementById("screen").innerHTML = "Middle";
-		//x = (((event.alpha - 310)/50)*216)+216
-	}else if((rotationVal<=75)&&(rotationVal>=5)){
-		screenNo = 1;
-		document.getElementById("screen").innerHTML = "Left";
-		//x = ((event.alpha - 5)/70)*216
-	}else{
-		screenNo = 0;
-		document.getElementById("screen").innerHTML = "None";
-		//x = 325
-	}
-	if (!(oldScreen == screenNo)){
-		oldScreen = screenNo;
-		ws.send(screenNo);
-	}
-	
-	//console.log(x);
-}
-	
+		var sphere = new THREE.Mesh(
+			new THREE.SphereGeometry(0.02, 0.02, 0.02),
+			new THREE.MeshNormalMaterial()
+		);
+		sphere.material.shading = THREE.FlatShading;
+		sphere.position.z = 0.5;
 
+		var torus = new THREE.Mesh(
+			new THREE.TorusGeometry(0.03, 0.02, 0.8, 0.8),
+			new THREE.MeshNormalMaterial()
+		);
+		torus.material.shading = THREE.FlatShading;
+		torus.position.z = 0.5;
+		torus.rotation.x = Math.PI/2;
+
+		arController.loadMarker('Data/patt.hiro', function(markerId) {
+			var markerRoot = arController.createThreeMarker(markerId);
+			markerRoot.add(torus);
+			arScene.scene.add(markerRoot);
+			
+			//console.log("saw a barcode marker hiro");
+		});
+
+		arController.loadMarker('Data/patt.kanji', function(markerId) {
+			var markerRoot = arController.createThreeMarker(markerId);
+			markerRoot.add(sphere);
+			arScene.scene.add(markerRoot);
+			
+			//console.log("saw a barcode marker kanji");
+		});
+		
+
+		var tick = function() {
+			arScene.process();
+			
+			//object to hold 12 element matrix
+			//var markerMatrix = new Float32Array(12);
+			//number of marker in scene
+			var markers = arController.getMarkerNum();
+			document.getElementById("markerNo").innerHTML = markers;
+			
+			/**
+			
+			//getting transmat of each marker into an array
+			var markersArray = [];
+			for (var i=0; i < markers; i++) {
+				var matrx = arController.getTransMatSquare(i,1,markerMatrix);
+				var array =  Array.prototype.slice.call(matrx);
+				//uncomment below line for python
+				//console.log(array);
+				markersArray.push(array);
+			}
+			
+			**/
+			
+			//console.log(markersArray);
+			
+			//print list of transmats
+			//console.log(markers);
+			
+			//displaying matrices on page
+			/**
+			document.getElementById("markerNo").innerHTML = markers;
+			if (markers > 0) {
+				document.getElementById("mtrx").innerHTML = markersArray[0];
+				if (markers > 1) {
+					document.getElementById("mtrx2").innerHTML = markersArray[1];
+				} else {
+					document.getElementById("mtrx2").innerHTML = [0,0,0,0,0,0,0,0,0,0,0,0];
+				}
+			} else {
+				document.getElementById("mtrx").innerHTML = [0,0,0,0,0,0,0,0,0,0,0,0];
+			}
+			
+			**/
+			
+			//displaying static camera matrix
+			//var camMat = arController.getCameraMatrix();
+			//document.getElementById("camMatrx").innerHTML = camMat;
+			//var threeCamera = scene.getCamera().position;
+			//document.getElementById("camMatrx").innerHTML = threeCamera;
+			
 				
+			//determining the screen
+			var oldScreen = screenNo;
+			//start from right
+			if(markers == 3){
+				screenNo = 3;
+				document.getElementById("screen").innerHTML = "Right";
+				x = 100;
+			}else if(markers == 2){
+				screenNo = 2;
+				document.getElementById("screen").innerHTML = "Middle";
+				x = 325;
+			}else if(markers == 1){
+				screenNo = 1;
+				document.getElementById("screen").innerHTML = "Left";
+				x = 500;
+			}else{
+				screenNo = 0;
+				//document.getElementById("screen").innerHTML = "None";
+				//x = 325
+			}
+			if (!(oldScreen == screenNo)){
+				oldScreen = screenNo;
+				//ws.send(screenNo);
 				
+				//drawing dot
+				ctx.fillStyle = "rgba(34,45,23,0.4)";
+				ctx.fillRect(0, 0, can.width, can.height);
+				//requestAnimationFrame(draw);
+				//ctx.clearRect(0,0,can.width,can.height);
+
+				ctx.beginPath();
+				ctx.arc(x, y, 7, 0, 2 * Math.PI);
+				ctx.fillStyle = 'rgba(250,0,0,0.4)';
+				ctx.fill();
+			}
+			console.log(x);
+			//drawing dot
+			
+
+
+			
+			/**
+			
+			//drawing dot
+			//get position of marker
+			if (markers > 0) {
+				var range = markersArray[0][11];
+				
+				//get x
+				x = (markersArray[0][3]) + (range/2);
+				//change below if you change the canvas size
+				var canvasWidth = 650;
+				var canvasX = (x/range)*canvasWidth;
+				//var xRanges = [x,markersArray[0][11]];
+				
+				//get y
+				y = (markersArray[0][7]) + (range/2);
+				//change below if you change the canvas size
+				var canvasHeight = 300;
+				var canvasY = (y/range)*canvasHeight;
+				console.log(canvasY);
+			} else {
+				canvasX = 325;
+				canvasY = 150;
+			}
+			ctx.fillStyle = "rgba(34,45,23,0.4)";
+			ctx.fillRect(0, 0, can.width, can.height);
+			//requestAnimationFrame(draw);
+			//ctx.clearRect(0,0,can.width,can.height);
+
+			ctx.beginPath();
+			ctx.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
+			ctx.fillStyle = 'rgba(250,0,0,0.4)';
+			ctx.fill();
+			
+			**/
+			 
+			//original code for drawing on markers below
+
+			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
+			sphere.rotation.z += rotationV;
+			torus.rotation.y += rotationV;
+			rotationV *= 0.8;
+
+			arScene.renderOn(renderer);
+			requestAnimationFrame(tick);
+		};
+
+		tick();
+
+	}});
+
+	delete window.ARThreeOnLoad;
+
+};
+
+if (window.ARController && ARController.getUserMediaThreeScene) {
+	ARThreeOnLoad();
+}
 </script>
 
 </body>
