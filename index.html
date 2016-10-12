@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Marker Detection</title>
+<title>Pattern marker example with Three.js</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 <style>
 html,body {
@@ -9,7 +9,6 @@ html,body {
 	width: 100%;
 	text-align: center;
 	overflow-x: hidden;
-	background-color: #F5F1C4;
 }
 .portrait canvas {
 	transform-origin: 0 0;
@@ -18,63 +17,25 @@ html,body {
 .desktop canvas {
  	transform: scale(-1, 1);
 }
-
-#myCanvas {
-position: absolute;
-background:rgba(34,45,23,0.4)
-border:1px solid #000000;
-left: 350px;
-top: 500px;
-}
-
-#textBox {
-position: absolute;
-top: 825px;
-}
-
 </style>
 </head>
 <body>
 
-<canvas id="myCanvas">
-</canvas>
-<div id="textBox">
-<h5>Transformation matrix output</h5>
-<p><b>Gyroscope data</b></p>
-<p>Alpha - rotational direction (0 to 360)</p>
-<p id="alpha"></p>
-<p>Beta - front to back motion (-180 to 180)</p>
-<p id="beta"></p>
-<p>Gamma - left to right motion (-90 to 90)</p>
-<p id="gamma"></p>
-<p>Number of markers </p>
-<p id="markerNo"></p>
-<p>Transformation matrix</p>
-<p id="camMatrx">[]</p>
-<p id="mtrx">[]</p>
-<p id="mtrx2">[]</p>
-</div>
+<h1>Pattern marker example with Three.js</h1>
+<p>On Chrome on Android, tap the screen to start playing video stream.</p>
+<p>Show  <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Hiro%20pattern.pdf">Hiro pattern</a> and <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Kanji%20pattern.pdf">Kanji pattern</a> to camera to display a colorful objects on top of them. Tap the screen to rotate the objects.
 
-<script async src="artoolkit.min.js"></script>
-<script async src="three.min.js"></script>
-<script async src="artoolkit.three.js"></script>
+<p>&larr; <a href="index.html">Back to examples</a></p>
+
+<script async src="../build/artoolkit.min.js"></script>
+<script async src="js/third_party/three.js/three.min.js"></script>
+<script async src="../js/artoolkit.three.js"></script>
 
 <script>
-//init canvas
-var can = document.getElementById('myCanvas');
-can.height = 300; can.width = 650;
-var ctx = can.getContext('2d');
-var x = 325, y = 150;
-ctx.fillStyle = "black";
-ctx.fillRect(700, 100, 100, 100);
-
 window.ARThreeOnLoad = function() {
-
 	ARController.getUserMediaThreeScene({maxARVideoSize: 320, cameraParam: 'Data/camera_para-iPhone 5 rear 640x480 1.0m.dat', 
 	onSuccess: function(arScene, arController, arCamera) {
-
 		document.body.className = arController.orientation;
-
 		var renderer = new THREE.WebGLRenderer({antialias: true});
 		if (arController.orientation === 'portrait') {
 			var w = (window.innerWidth / arController.videoHeight) * arController.videoWidth;
@@ -89,163 +50,90 @@ window.ARThreeOnLoad = function() {
 				document.body.className += ' desktop';
 			}
 		}
-
 		document.body.insertBefore(renderer.domElement, document.body.firstChild);
-
 		var rotationV = 0;
 		var rotationTarget = 0;
-
 		renderer.domElement.addEventListener('click', function(ev) {
 			ev.preventDefault();
 			rotationTarget += 1;
-			
-			//var transMatrx = ev.data.matrix
-			//document.getElementById("mtrxHiro").innerHTML = ev.matrix;
-			//document.getElementById("mtrxKanji").innerHTML = ev.matrix;
-			
 		}, false);
-
 		var sphere = new THREE.Mesh(
-			new THREE.SphereGeometry(0.02, 0.02, 0.02),
+			new THREE.SphereGeometry(0.5, 8, 8),
 			new THREE.MeshNormalMaterial()
 		);
 		sphere.material.shading = THREE.FlatShading;
 		sphere.position.z = 0.5;
-
 		var torus = new THREE.Mesh(
-			new THREE.TorusGeometry(0.03, 0.02, 0.8, 0.8),
+			new THREE.TorusGeometry(0.3, 0.2, 8, 8),
 			new THREE.MeshNormalMaterial()
 		);
 		torus.material.shading = THREE.FlatShading;
 		torus.position.z = 0.5;
 		torus.rotation.x = Math.PI/2;
-
 		arController.loadMarker('Data/patt.hiro', function(markerId) {
-			var markerRoot = arController.createThreeMarker(markerId);
-			markerRoot.add(torus);
-			arScene.scene.add(markerRoot);
-			
-			//console.log("saw a barcode marker hiro");
-		});
-
-		arController.loadMarker('Data/patt.kanji', function(markerId) {
 			var markerRoot = arController.createThreeMarker(markerId);
 			markerRoot.add(sphere);
 			arScene.scene.add(markerRoot);
-			
-			//console.log("saw a barcode marker kanji");
+		});
+		arController.loadMarker('Data/patt.kanji', function(markerId) {
+			var markerRoot = arController.createThreeMarker(markerId);
+			markerRoot.add(torus);
+			arScene.scene.add(markerRoot);
 		});
 		
+		//pattern detection mode
+		arController.setPatternDetectionMode( artoolkit.AR_MATRIX_CODE_DETECTION );
+		
+		// Add an event listener to listen to getMarker events on the ARController.
+		// Whenever ARController#process detects a marker, it fires a getMarker event
+		// with the marker details.
+		//
+		var detectedBarcodeMarkers = {};
+		arController.addEventListener('getMarker', function(ev) {
+			var barcodeId = ev.data.marker.idMatrix;
+			if (barcodeId !== -1) {
+				console.log("saw a barcode marker with id", barcodeId);
 
+				// Note that you need to copy the values of the transformation matrix,
+				// as the event transformation matrix is reused for each marker event
+				// sent by an ARController.
+				//
+				var transform = ev.data.matrix;
+				if (!detectedBarcodeMarkers[barcodeId]) {
+					detectedBarcodeMarkers[barcodeId] = {
+						visible: true,
+						matrix: new Float32Array(16)
+					}
+				}
+				detectedBarcodeMarkers[barcodeId].visible = true;
+				detectedBarcodeMarkers[barcodeId].matrix.set(transform);
+
+			}
+		});
+
+		var cameraMatrix = arController.getCameraMatrix();
+
+		for (var i in detectedBarcodeMarkers) {
+			detectedBarcodeMarkers.visible = false;
+		}
+
+		// Process a video frame to find markers in it.
+		// Each detected marker fires a getMarker event.
+		//
+		
 		var tick = function() {
 			arScene.process();
-			
-			//object to hold 12 element matrix
-			var markerMatrix = new Float32Array(12);
-			//number of marker in scene
-			var markers = arController.getMarkerNum();
-			
-			//getting transmat of each marker into an array
-			var markersArray = [];
-			for (var i=0; i < markers; i++) {
-				var matrx = arController.getTransMatSquare(i,1,markerMatrix);
-				var array =  Array.prototype.slice.call(matrx);
-				//uncomment below line for python
-				//console.log(array);
-				markersArray.push(array);
-			}
-			//console.log(markersArray);
-			
-			//print list of transmats
-			//console.log(markers);
-			
-			//displaying matrices on page
-			document.getElementById("markerNo").innerHTML = markers;
-			if (markers > 0) {
-				document.getElementById("mtrx").innerHTML = markersArray[0];
-				if (markers > 1) {
-					document.getElementById("mtrx2").innerHTML = markersArray[1];
-				} else {
-					document.getElementById("mtrx2").innerHTML = [0,0,0,0,0,0,0,0,0,0,0,0];
-				}
-			} else {
-				document.getElementById("mtrx").innerHTML = [0,0,0,0,0,0,0,0,0,0,0,0];
-			}
-			
-			//displaying static camera matrix
-			var camMat = arController.getCameraMatrix();
-			document.getElementById("camMatrx").innerHTML = camMat;
-			//var threeCamera = scene.getCamera().position;
-			//document.getElementById("camMatrx").innerHTML = threeCamera;
-			
-			
-			// gyro
-			if(window.DeviceOrientationEvent){
-				window.addEventListener("deviceorientation", orientation, false);
-			}else{
-				console.log("DeviceOrientationEvent is not supported");
-			}
-			
-			function orientation(event){
-				document.getElementById("alpha").innerHTML = event.alpha;
-				document.getElementById("beta").innerHTML = event.beta;
-				document.getElementById("gamma").innerHTML = event.gamma;
-			}
-			
-			
-			//drawing dot
-			//get position of marker
-			if (markers > 0) {
-				var range = markersArray[0][11];
-				
-				//get x
-				x = (markersArray[0][3]) + (range/2);
-				//change below if you change the canvas size
-				var canvasWidth = 650;
-				var canvasX = (x/range)*canvasWidth;
-				//var xRanges = [x,markersArray[0][11]];
-				
-				//get y
-				y = (markersArray[0][7]) + (range/2);
-				//change below if you change the canvas size
-				var canvasHeight = 300;
-				var canvasY = (y/range)*canvasHeight;
-				console.log(canvasY);
-			} else {
-				canvasX = 325;
-				canvasY = 150;
-			}
-			ctx.fillStyle = "rgba(34,45,23,0.4)";
-			ctx.fillRect(0, 0, can.width, can.height);
-			//requestAnimationFrame(draw);
-			//ctx.clearRect(0,0,can.width,can.height);
-
-			ctx.beginPath();
-			ctx.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
-			ctx.fillStyle = 'rgba(250,0,0,0.4)';
-			ctx.fill();
-			 			
-			 
-			//original code for drawing on markers below
-
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
 			sphere.rotation.z += rotationV;
 			torus.rotation.y += rotationV;
 			rotationV *= 0.8;
-
 			arScene.renderOn(renderer);
 			requestAnimationFrame(tick);
 		};
-
 		tick();
-
 	}});
-
 	delete window.ARThreeOnLoad;
-
-
 };
-
 if (window.ARController && ARController.getUserMediaThreeScene) {
 	ARThreeOnLoad();
 }
