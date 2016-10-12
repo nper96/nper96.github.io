@@ -84,6 +84,9 @@ window.ARThreeOnLoad = function() {
 		//pattern detection mode
 		arController.setPatternDetectionMode( artoolkit.AR_MATRIX_CODE_DETECTION );
 		
+		var tick = function() {
+		
+					
 		// Add an event listener to listen to getMarker events on the ARController.
 		// Whenever ARController#process detects a marker, it fires a getMarker event
 		// with the marker details.
@@ -121,7 +124,8 @@ window.ARThreeOnLoad = function() {
 		// Each detected marker fires a getMarker event.
 		//
 		
-		var tick = function() {
+		
+		
 			arScene.process();
 			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
 			sphere.rotation.z += rotationV;
