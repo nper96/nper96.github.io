@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Pattern marker example with Three.js</title>
+<title>Marker Detection</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 <style>
 html,body {
@@ -9,138 +9,77 @@ html,body {
 	width: 100%;
 	text-align: center;
 	overflow-x: hidden;
+	background-color: #F5F1C4;
 }
-.portrait canvas {
-	transform-origin: 0 0;
-	transform: rotate(-90deg) translateX(-100%);
+
+#textBox {
+position: absolute;
+top: 50px;
 }
-.desktop canvas {
- 	transform: scale(-1, 1);
-}
+
 </style>
 </head>
 <body>
 
-<h1>Pattern marker example with Three.js</h1>
-<p>On Chrome on Android, tap the screen to start playing video stream.</p>
-<p>Show  <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Hiro%20pattern.pdf">Hiro pattern</a> and <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Kanji%20pattern.pdf">Kanji pattern</a> to camera to display a colorful objects on top of them. Tap the screen to rotate the objects.
-
-<p>&larr; <a href="index.html">Back to examples</a></p>
-
-<script async src="../build/artoolkit.min.js"></script>
-<script async src="js/third_party/three.js/three.min.js"></script>
-<script async src="../js/artoolkit.three.js"></script>
+<div id="textBox">
+<p id="screen">None</p>
+<p>Alpha - rotational direction (0 to 360)</p>
+<p id="alpha"></p>
+<p>Beta - front to back motion (-180 to 180)</p>
+<p id="beta"></p>
+<p>Gamma - left to right motion (-90 to 90)</p>
+<p id="gamma"></p>
+</div>
 
 <script>
-window.ARThreeOnLoad = function() {
-	ARController.getUserMediaThreeScene({maxARVideoSize: 320, cameraParam: 'Data/camera_para-iPhone 5 rear 640x480 1.0m.dat', 
-	onSuccess: function(arScene, arController, arCamera) {
-		document.body.className = arController.orientation;
-		var renderer = new THREE.WebGLRenderer({antialias: true});
-		if (arController.orientation === 'portrait') {
-			var w = (window.innerWidth / arController.videoHeight) * arController.videoWidth;
-			var h = window.innerWidth;
-			renderer.setSize(w, h);
-			renderer.domElement.style.paddingBottom = (w-h) + 'px';
-		} else {
-			if (/Android|mobile|iPad|iPhone/i.test(navigator.userAgent)) {
-				renderer.setSize(window.innerWidth, (window.innerWidth / arController.videoWidth) * arController.videoHeight);
-			} else {
-				renderer.setSize(arController.videoWidth, arController.videoHeight);
-				document.body.className += ' desktop';
-			}
-		}
-		document.body.insertBefore(renderer.domElement, document.body.firstChild);
-		var rotationV = 0;
-		var rotationTarget = 0;
-		renderer.domElement.addEventListener('click', function(ev) {
-			ev.preventDefault();
-			rotationTarget += 1;
-		}, false);
-		var sphere = new THREE.Mesh(
-			new THREE.SphereGeometry(0.5, 8, 8),
-			new THREE.MeshNormalMaterial()
-		);
-		sphere.material.shading = THREE.FlatShading;
-		sphere.position.z = 0.5;
-		var torus = new THREE.Mesh(
-			new THREE.TorusGeometry(0.3, 0.2, 8, 8),
-			new THREE.MeshNormalMaterial()
-		);
-		torus.material.shading = THREE.FlatShading;
-		torus.position.z = 0.5;
-		torus.rotation.x = Math.PI/2;
-		arController.loadMarker('Data/patt.hiro', function(markerId) {
-			var markerRoot = arController.createThreeMarker(markerId);
-			markerRoot.add(sphere);
-			arScene.scene.add(markerRoot);
-		});
-		arController.loadMarker('Data/patt.kanji', function(markerId) {
-			var markerRoot = arController.createThreeMarker(markerId);
-			markerRoot.add(torus);
-			arScene.scene.add(markerRoot);
-		});
-		
-		//pattern detection mode
-		arController.setPatternDetectionMode( artoolkit.AR_MATRIX_CODE_DETECTION );
-		
-		var tick = function() {
-		
-					
-		// Add an event listener to listen to getMarker events on the ARController.
-		// Whenever ARController#process detects a marker, it fires a getMarker event
-		// with the marker details.
-		//
-		var detectedBarcodeMarkers = {};
-		arController.addEventListener('getMarker', function(ev) {
-			var barcodeId = ev.data.marker.idMatrix;
-			if (barcodeId !== -1) {
-				console.log("saw a barcode marker with id", barcodeId);
+var ws = new WebSocket("ws://43.246.234.255:81?type=tracker");
+var dummyVar = 0;
 
-				// Note that you need to copy the values of the transformation matrix,
-				// as the event transformation matrix is reused for each marker event
-				// sent by an ARController.
-				//
-				var transform = ev.data.matrix;
-				if (!detectedBarcodeMarkers[barcodeId]) {
-					detectedBarcodeMarkers[barcodeId] = {
-						visible: true,
-						matrix: new Float32Array(16)
-					}
-				}
-				detectedBarcodeMarkers[barcodeId].visible = true;
-				detectedBarcodeMarkers[barcodeId].matrix.set(transform);
+var screenNo = 0;
+			
+// gyro
 
-			}
-		});
-
-		var cameraMatrix = arController.getCameraMatrix();
-
-		for (var i in detectedBarcodeMarkers) {
-			detectedBarcodeMarkers.visible = false;
-		}
-
-		// Process a video frame to find markers in it.
-		// Each detected marker fires a getMarker event.
-		//
-		
-		
-		
-			arScene.process();
-			rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
-			sphere.rotation.z += rotationV;
-			torus.rotation.y += rotationV;
-			rotationV *= 0.8;
-			arScene.renderOn(renderer);
-			requestAnimationFrame(tick);
-		};
-		tick();
-	}});
-	delete window.ARThreeOnLoad;
-};
-if (window.ARController && ARController.getUserMediaThreeScene) {
-	ARThreeOnLoad();
+if(window.DeviceOrientationEvent){
+	window.addEventListener("deviceorientation", orientation, false);
+}else{
+	console.log("DeviceOrientationEvent is not supported");
 }
+function orientation(event){
+	document.getElementById("alpha").innerHTML = event.alpha;
+	document.getElementById("beta").innerHTML = event.beta;
+	document.getElementById("gamma").innerHTML = event.gamma;
+	
+	//determining the screen
+	var rotationVal = event.alpha;
+	var oldScreen = screenNo;
+	if((rotationVal<=297)&&(rotationVal>=105)){
+		screenNo = 3;
+		document.getElementById("screen").innerHTML = "Right";
+		//x = (((event.alpha - 191)/192)*216)+432
+	}else if(((rotationVal<=360)&&(rotationVal>=310))){
+		screenNo = 2;
+		document.getElementById("screen").innerHTML = "Middle";
+		//x = (((event.alpha - 310)/50)*216)+216
+	}else if((rotationVal<=75)&&(rotationVal>=5)){
+		screenNo = 1;
+		document.getElementById("screen").innerHTML = "Left";
+		//x = ((event.alpha - 5)/70)*216
+	}else{
+		screenNo = 0;
+		document.getElementById("screen").innerHTML = "None";
+		//x = 325
+	}
+	if (!(oldScreen == screenNo)){
+		oldScreen = screenNo;
+		ws.send(screenNo);
+	}
+	
+	//console.log(x);
+}
+	
+
+				
+				
 </script>
 
 </body>
