@@ -82,7 +82,7 @@ window.ARThreeOnLoad = function() {
 			markerId = kanji;
 		});
 		
-		ar.addEventListener('getMarker', function(ev) {
+		arController.addEventListener('getMarker', function(ev) {
 			if (ev.data.marker.idPatt === markerId) {
 				console.log('saw marker', ev.data.marker);
 				console.log('transformation matrix', ar.getTransformationMatrix());
