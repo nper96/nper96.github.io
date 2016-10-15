@@ -66,6 +66,8 @@ window.ARThreeOnLoad = function() {
 			rotationTarget += 1;
 		}, false);
 		
+		arController.setPatternDetectionMode( artoolkit.AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX );
+		
 		var markerId;
 
 		arController.loadMarker('Data/patt.hiro', function(hiro) {
@@ -83,9 +85,11 @@ window.ARThreeOnLoad = function() {
 		});
 		
 		arController.addEventListener('getMarker', function(ev) {
-			if (ev.data.marker.idPatt === markerId) {
-				console.log('saw marker', ev.data.marker);
-				console.log('transformation matrix', arController.getTransformationMatrix());
+			if (ev.data.marker.idMatrix !== -1) {
+				console.log('saw barcode marker', ev.data.marker.idMatrix);
+			}
+			if (ev.data.marker.idPatt !== -1) {
+				console.log('saw pattern marker', ev.data.marker.idPatt);
 			}
 		});
 
