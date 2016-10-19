@@ -64,20 +64,6 @@ window.ARThreeOnLoad = function() {
 		arController.setPatternDetectionMode( artoolkit.AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX );
 		
 		var markerId;
-
-		arController.loadMarker('Data/patt.hiro', function(hiro) {
-			//var markerRoot = arController.createThreeMarker(markerId);
-			//markerRoot.add(sphere);
-			//arScene.scene.add(markerRoot);
-			markerId = hiro;
-		});
-
-		arController.loadMarker('Data/patt.kanji', function(kanji) {
-			//var markerRoot = arController.createThreeMarker(markerId);
-			//markerRoot.add(torus);
-			//arScene.scene.add(markerRoot);
-			markerId = kanji;
-		});
 		
 		arController.addEventListener('getMarker', function(ev) {
 			if (ev.data.marker.idMatrix !== -1) {
